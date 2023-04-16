@@ -1,0 +1,9 @@
+{
+    "usingComponents": {},
+    "navigationBarTitleText": "家居监控",
+    "enablePullDownRefresh": true,
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#d1feeb",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+}

@@ -1,0 +1,56 @@
+<!--pages/Smart Home/Smart Home.wxml-->
+<view class="container">
+    <!-- 瓦灰#867e76 -->
+    <view class="title" style="padding-bottom: 100rpx;">
+        <text>GX智能家居</text>
+    </view>
+    <view class="weather color-block" style="width: 100%; height: 200rpx; margin-bottom: 30rpx; background-color: #867e76;">
+        <view class="" style="height: 50%; width: 100%; display: flex; flex-direction: row; justify-content: space-around;   align-items: center; margin-top: 10rpx;">
+            <text style="color: white; font-size: 80rpx;">{{tmpWeatherText}}°</text>
+            <view style="width: 40%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;">
+                <text style="font-size: 30rpx;">{{localText}}</text>
+                <text style="font-size: 30rpx;">{{weatherText}}</text>
+            </view>
+            <image src="../../icons/{{weatherIconText}}.svg" mode=" aspectFit" style=" width: 90rpx;" />
+
+        </view>
+        <view class="" style=" height: 50%; width: 100%; display: flex; flex-direction: row; justify-content: space-around; align-items: center;  margin-bottom: 10rpx;">
+            <text style="color: blueviolet; font-size: 50rpx;">{{humWeatherText}}%</text>
+            <text style="width: 40%; font-size: 15rpx; color: rgba(255, 255, 240, 0.411);">数据更新于{{reportTimeText}}</text>
+            <text>{{windDirectText}}风 {{windPowerText}}</text>
+        </view>
+    </view>
+    <!-- 群青#1772b4 夕阳红#de2a18 -->
+    <view class="module color-block" style="width: 45%; height: 200rpx; margin-bottom: 30rpx; background-color: {{tmpColorText}};">
+        <image src="../../icons/温度.svg" mode="aspectFit" style="height: 80%; width: 40%;" />
+        <view class="subModule" style="width: 50%; height: 100%;">
+            <text style="margin: 10rpx 0; font-size: 35rpx;">室内温度</text>
+            <text style="margin: 10rpx 0; font-size: 50rpx">{{tmpText}}℃</text>
+        </view>
+    </view>
+    <!-- 靛青#1661ab -->
+    <view class="module color-block" style="width: 45%; height: 200rpx; margin-bottom: 30rpx; background-color: {{humColorText}};">
+        <image src="../../icons/湿度.svg" mode="aspectFit" style="height: 80%; width: 40%;" />
+        <view class="subModule" style="width: 50%; height: 100%;">
+            <text style="margin: 10rpx 0; font-size: 35rpx;">室内湿度</text>
+            <text style="margin: 10rpx 0; font-size: 50rpx">{{humText}}%</text>
+        </view>
+    </view>
+    <!-- 石罐灰#47484c 荧石白#e2e1e4 -->
+    <view class="module color-block" style="width: 45%; height: 200rpx; margin-bottom: 30rpx; background-color: {{LEDcolorText}};">
+        <image src="../../icons/灯泡-灭.svg" mode="aspectFit" style="height: 80%; width: 40%;" />
+        <view class="subModule" style="width: 50%; height: 100%;">
+            <text style="margin: 10rpx 0; font-size: 35rpx;">客厅电灯</text>
+            <switch bindchange="LEDswitch" checked="{{LEDswitchText}}" style="margin: 10rpx 0;" />
+        </view>
+    </view>
+    <!-- 翠绿 -->
+    <view class="module color-block" style="width: 45%; height: 200rpx; margin-bottom: 30rpx; background-color: {{rfidColorText}};">
+        <text>rfid</text>
+    </view>
+</view>
+
+<view>
+    <image class="{{syncIconClassText}}" src="../../icons/同步.svg" mode="aspectFit" bindtap="onSyncRefresh" style="position: fixed; bottom: 50rpx; right: 20rpx; width: 150rpx; height: 150rpx;"></image>
+    <image src="../../icons/logo-gwf.png" mode="aspectFit" style="position: fixed;bottom: 110rpx; right: 80rpx; width: 30rpx; height: 30rpx;"></image>
+</view>
