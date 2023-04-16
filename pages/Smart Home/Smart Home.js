@@ -21,7 +21,6 @@ var ledCommand = {
     "LED": "on"
 };
 
-
 Page({
     data: {
         "tmpText": "06",
@@ -127,6 +126,7 @@ Page({
                     if (that.data.weatherText.includes("雨")) { that.setData({ weatherIconText: "雨" }); }
                 }
             }
+            that.sendAck();
             that.refreshPage();
             that.setData({
                 syncIconClassText: ""
@@ -158,6 +158,13 @@ Page({
                 LEDswitchText: true
             })
         }
+    },
+
+    sendAck: function () {
+        const send_message = {
+            "command": "ack"
+        };
+        client.publish("GX/miniProgram", JSON.stringify(send_message));
     },
 
     onSyncRefresh: function () {
