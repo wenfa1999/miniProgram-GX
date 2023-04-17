@@ -25,9 +25,10 @@ Page({
     data: {
         "tmpText": "06",
         "humText": "13",
+        "weatherColorText": "#2486b9",
         "LEDcolorText": "#47484c",
         "humColorText": "#1661ab",
-        "tmpColorText": "#1772b4",
+        "tmpColorText": "#c3d7df",
         "rfidColorText": "#20a162",
         "LEDswitchText": false,
         "localText": weatherInfo.local,
@@ -38,7 +39,10 @@ Page({
         "windPowerText": weatherInfo.windPower,
         "reportTimeText": weatherInfo.reportTime,
         "weatherIconText": "晴",
-        "syncIconClassText": ""
+        "ledStatusIconText":"灭",
+        "syncIconClassText": "",
+        "rfidArray": [],
+        "isRfidNULL":true
     },
     onLoad(options) {
         this.connectMqtt();
@@ -51,13 +55,17 @@ Page({
             client.publish("GX/miniProgram", JSON.stringify(ledCommand));
             if (ledStatus === 1) {
                 this.setData({
-                    "switchLED": '关灯'
+                    // "switchLED": '关灯',
+                    "LEDcolorText": "#d8e3e7",
+                    "ledStatusIconText": "亮"
                 });
                 ledStatus = 0;
                 ledCommand.LED = "off";
             } else {
                 this.setData({
-                    "switchLED": '开灯'
+                    // "switchLED": '开灯',
+                    "LEDcolorText": "#47484c",
+                    "ledStatusIconText": "灭"
                 });
                 ledStatus = 1;
                 ledCommand.LED = "on";
@@ -97,8 +105,14 @@ Page({
             if (("command" in jsonMessage) && "report" === jsonMessage.command) {
                 if (jsonMessage.status != undefined) {
                     if ("LED" in jsonMessage.status) {
-                        if (jsonMessage.status.LED === "on") { ledStatus = 0; ledCommand.LED = "off"; }
-                        else if (jsonMessage.status.LED === "off") { ledStatus = 1; ledCommand.LED = "on"; }
+                        if (jsonMessage.status.LED === "on") { ledStatus = 0; ledCommand.LED = "off"; that.setData({
+                            "LEDcolorText": "#d8e3e7",
+                            "ledStatusIconText": "亮"
+                        });}
+                        else if (jsonMessage.status.LED === "off") { ledStatus = 1; ledCommand.LED = "on"; that.setData({
+                            "LEDcolorText": "#47484c",
+                            "ledStatusIconText": "灭"
+                        });}
                     }
                     if ("tmp" in jsonMessage.status) {
                         that.setData({
@@ -109,6 +123,16 @@ Page({
                         that.setData({
                             humText: jsonMessage.status.hum
                         });
+                    }
+                    if ("rfid" in jsonMessage.status) {
+                        if (Object.keys(jsonMessage.status.rfid).length > 0)
+                        {
+                            that.setData({
+                                "rfidArray": jsonMessage.status.rfid,
+                                "isRfidNULL":false
+                            });
+                        }
+                        
                     }
                 }
                 if (jsonMessage.weatherInfo != undefined) {

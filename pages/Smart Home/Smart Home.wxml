@@ -1,10 +1,11 @@
 <!--pages/Smart Home/Smart Home.wxml-->
 <view class="container">
     <!-- 瓦灰#867e76 -->
-    <view class="title" style="padding-bottom: 100rpx;">
-        <text>GX智能家居</text>
+    <view class="title" style="padding-bottom: 80rpx;">
+        <image src="../../icons/logo-gwf.png" mode="aspectFit" style="width: 40rpx; height: 40rpx;"></image>
+        <text style="font-size: x-large;">GX智能家居</text>
     </view>
-    <view class="weather color-block" style="width: 100%; height: 200rpx; margin-bottom: 30rpx; background-color: #867e76;">
+    <view class="weather color-block" style="width: 100%; height: 200rpx; margin-bottom: 30rpx; background-color: {{weatherColorText}};">
         <view class="" style="height: 50%; width: 100%; display: flex; flex-direction: row; justify-content: space-around;   align-items: center; margin-top: 10rpx;">
             <text style="color: white; font-size: 80rpx;">{{tmpWeatherText}}°</text>
             <view style="width: 40%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;">
@@ -38,19 +39,22 @@
     </view>
     <!-- 石罐灰#47484c 荧石白#e2e1e4 -->
     <view class="module color-block" style="width: 45%; height: 200rpx; margin-bottom: 30rpx; background-color: {{LEDcolorText}};">
-        <image src="../../icons/灯泡-灭.svg" mode="aspectFit" style="height: 80%; width: 40%;" />
+        <image src="../../icons/灯泡-{{ledStatusIconText}}.svg" mode="aspectFit" style="height: 80%; width: 40%;" />
         <view class="subModule" style="width: 50%; height: 100%;">
             <text style="margin: 10rpx 0; font-size: 35rpx;">客厅电灯</text>
             <switch bindchange="LEDswitch" checked="{{LEDswitchText}}" style="margin: 10rpx 0;" />
         </view>
     </view>
     <!-- 翠绿 -->
-    <view class="module color-block" style="width: 45%; height: 200rpx; margin-bottom: 30rpx; background-color: {{rfidColorText}};">
-        <text>rfid</text>
-    </view>
+    <scroll-view scroll-y="true" class="module color-block rfid" style="width: 45%; height: 200rpx; margin-bottom: 30rpx; background-color: {{rfidColorText}}; font-size: 20rpx;">
+        <view wx:if="{{isRfidNULL}}" style="font-size: x-large;margin: 35rpx;"> RFID刷卡记录 </view>
+        <view style="margin: 20rpx;" wx:for="{{rfidArray}}" wx:for-index="idx" wx:for-item="item">
+            <text style="width: 100%; "> {{idx}}: {{item.message}}</text>
+        </view>
+    </scroll-view>
+
 </view>
 
 <view>
     <image class="{{syncIconClassText}}" src="../../icons/同步.svg" mode="aspectFit" bindtap="onSyncRefresh" style="position: fixed; bottom: 50rpx; right: 20rpx; width: 150rpx; height: 150rpx;"></image>
-    <image src="../../icons/logo-gwf.png" mode="aspectFit" style="position: fixed;bottom: 110rpx; right: 80rpx; width: 30rpx; height: 30rpx;"></image>
 </view>
