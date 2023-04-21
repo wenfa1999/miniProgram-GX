@@ -13,22 +13,6 @@ page {
     padding: 20rpx 20rpx;
 }
 
-
-.rotate {
-    animation: rotate 1s linear infinite;
-}
-
-@keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-
 .weather {
     display: flex;
     flex-direction: column;

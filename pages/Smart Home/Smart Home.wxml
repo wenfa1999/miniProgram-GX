@@ -56,5 +56,5 @@
 </view>
 
 <view>
-    <image class="{{syncIconClassText}}" src="../../icons/同步.svg" mode="aspectFit" bindtap="onSyncRefresh" style="position: fixed; bottom: 50rpx; right: 20rpx; width: 150rpx; height: 150rpx;"></image>
+    <image src="../../icons/同步.svg" mode="aspectFit" bindtap="onSyncRefresh" style="position: fixed; bottom: 50rpx; right: 20rpx; width: 150rpx; height: 150rpx;"></image>
 </view>

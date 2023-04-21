@@ -1,6 +1,6 @@
 // pages/Smart Home/Smart Home.js
 
-const mqtt = require("../../utils/mqtt");
+const mqtt = require("../../utils/mqtt.min");
 
 var client = null;  // mqtt客户端
 let isMqttConnected = false;    // mqtt客户端是否已连接
@@ -39,10 +39,9 @@ Page({
         "windPowerText": weatherInfo.windPower,
         "reportTimeText": weatherInfo.reportTime,
         "weatherIconText": "晴",
-        "ledStatusIconText":"灭",
-        "syncIconClassText": "",
+        "ledStatusIconText": "灭",
         "rfidArray": [],
-        "isRfidNULL":true
+        "isRfidNULL": true
     },
     onLoad(options) {
         this.connectMqtt();
@@ -72,7 +71,7 @@ Page({
             }
         }
         else {
-            console.log("MQTT服务器未连接...");
+            // console.log("MQTT服务器未连接...");
         }
     },
 
@@ -87,11 +86,11 @@ Page({
         console.log("clientId:" + options.clientId);
         client = mqtt.connect("wxs://mqtt.gwf.icu/mqtt", options);
         client.on("connect", (e) => {
-            console.log("服务器连接成功");
+            // console.log("服务器连接成功");
             isMqttConnected = true;
             client.subscribe("GX/rpi", { qos: 0 }, function (err) {
                 if (!err) {
-                    console.log("订阅成功");
+                    // console.log("订阅成功");
                 }
             });
             this.getRpiInfo();
@@ -100,19 +99,23 @@ Page({
         });
         // 信息监听事件
         client.on("message", function (topic, message) {
-            console.log("收到:" + message);
+            // console.log("收到:" + message);
             var jsonMessage = JSON.parse(message);
             if (("command" in jsonMessage) && "report" === jsonMessage.command) {
                 if (jsonMessage.status != undefined) {
                     if ("LED" in jsonMessage.status) {
-                        if (jsonMessage.status.LED === "on") { ledStatus = 0; ledCommand.LED = "off"; that.setData({
-                            "LEDcolorText": "#d8e3e7",
-                            "ledStatusIconText": "亮"
-                        });}
-                        else if (jsonMessage.status.LED === "off") { ledStatus = 1; ledCommand.LED = "on"; that.setData({
-                            "LEDcolorText": "#47484c",
-                            "ledStatusIconText": "灭"
-                        });}
+                        if (jsonMessage.status.LED === "on") {
+                            ledStatus = 0; ledCommand.LED = "off"; that.setData({
+                                "LEDcolorText": "#d8e3e7",
+                                "ledStatusIconText": "亮"
+                            });
+                        }
+                        else if (jsonMessage.status.LED === "off") {
+                            ledStatus = 1; ledCommand.LED = "on"; that.setData({
+                                "LEDcolorText": "#47484c",
+                                "ledStatusIconText": "灭"
+                            });
+                        }
                     }
                     if ("tmp" in jsonMessage.status) {
                         that.setData({
@@ -125,14 +128,13 @@ Page({
                         });
                     }
                     if ("rfid" in jsonMessage.status) {
-                        if (Object.keys(jsonMessage.status.rfid).length > 0)
-                        {
+                        if (Object.keys(jsonMessage.status.rfid).length > 0) {
                             that.setData({
                                 "rfidArray": jsonMessage.status.rfid,
-                                "isRfidNULL":false
+                                "isRfidNULL": false
                             });
                         }
-                        
+
                     }
                 }
                 if (jsonMessage.weatherInfo != undefined) {
@@ -152,16 +154,13 @@ Page({
             }
             that.sendAck();
             that.refreshPage();
-            that.setData({
-                syncIconClassText: ""
-            });
             wx.hideLoading();
         });
         client.on("reconnect", (error) => {
-            console.log("正在重连...", error);
+            // console.log("正在重连...", error);
         });
         client.on("error", (error) => {
-            console.log("连接失败...", error);
+            // console.log("连接失败...", error);
         });
     },
 
@@ -193,14 +192,17 @@ Page({
 
     onSyncRefresh: function () {
         var that = this;
-        that.setData({
-            syncIconClassText: "rotate"
-        });
         // 开始刷新
         wx.showLoading({
             title: '同步中',
         });
-        this.getRpiInfo();
+        if (client.connected) {
+            // console.log("已连接，获取数据");
+            this.getRpiInfo();
+        }
+        else {
+            this.connectMqtt();
+        }
     },
 
 
@@ -211,14 +213,11 @@ Page({
 
 
     onShow() {
-        // wx.startPullDownRefresh();
         wx.showLoading({
             title: '同步中',
         });
-        if (isMqttConnected) {
-            console.log("正在断开连接");
-            console.log("正在重连");
-            isMqttConnected = false;
+        isMqttConnected = false;
+        if (client.connected) {
             client.reconnect();
         }
         this.getRpiInfo();
@@ -241,11 +240,12 @@ Page({
             title: '同步中',
         });
         if (isMqttConnected) {
-            console.log("正在断开连接");
-            console.log("正在重连");
+            // console.log("正在断开连接");
+            // console.log("正在重连");
             isMqttConnected = false;
             client.reconnect();
         }
+        this.getRpiInfo();
     },
 
     onReachBottom() {
